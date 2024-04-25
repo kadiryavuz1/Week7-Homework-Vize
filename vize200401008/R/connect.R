@@ -54,3 +54,31 @@ fetch_and_fill_na <- function(db_path, table_name) {
   DBI::dbDisconnect(con)
   return(data)
 }
+
+#' Veritabanından veri çeken ve eksik değerleri bir önceki ve bir sonraki satırın ortalaması ile dolduran fonksiyon
+#'
+#' @param db_path SQLite veritabanı dosyasının yolu.
+#' @param table_name Çekilecek veritabanı tablosunun adı.
+#' @return Düzeltilmiş veri çerçevesi.
+#' @export
+fetch_and_fill_na <- function(db_path, table_name) {
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = db_path)
+  # Veritabanından verileri çek
+  data <- DBI::dbReadTable(con, table_name)
+
+  # Eksik değerleri bir önceki ve bir sonraki satırın ortalaması ile doldur
+  for (i in 1:ncol(data)) {
+    for (j in 2:(nrow(data) - 1)) {
+      if (is.na(data[j, i])) {
+        data[j, i] <- mean(c(data[j-1, i], data[j+1, i]), na.rm = TRUE)
+      }
+    }
+  }
+
+  # Düzeltmeleri veritabanına yaz
+  DBI::dbWriteTable(con, table_name, data, overwrite = TRUE)
+
+  DBI::dbDisconnect(con)
+  return(data)
+}
+

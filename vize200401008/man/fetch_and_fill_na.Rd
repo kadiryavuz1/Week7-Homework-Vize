@@ -5,6 +5,8 @@
 \title{Veritabanından veri çeken ve eksik değerleri bir önceki ve bir sonraki satırın ortalaması ile dolduran fonksiyon}
 \usage{
 fetch_and_fill_na(db_path, table_name)
+
+fetch_and_fill_na(db_path, table_name)
 }
 \arguments{
 \item{db_path}{SQLite veritabanı dosyasının yolu.}
@@ -13,7 +15,11 @@ fetch_and_fill_na(db_path, table_name)
 }
 \value{
 Düzeltilmiş veri çerçevesi.
+
+Düzeltilmiş veri çerçevesi.
 }
 \description{
+Veritabanından veri çeken ve eksik değerleri bir önceki ve bir sonraki satırın ortalaması ile dolduran fonksiyon
+
 Veritabanından veri çeken ve eksik değerleri bir önceki ve bir sonraki satırın ortalaması ile dolduran fonksiyon
 }
