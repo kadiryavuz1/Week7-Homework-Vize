@@ -54,3 +54,27 @@ fetch_and_fill_na <- function(db_path, table_name) {
   DBI::dbDisconnect(con)
   return(data)
 }
+
+#' @export
+calculate_correlation_and_plot <- function(db_path, table_name) {
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = db_path)
+  data <- DBI::dbReadTable(con, table_name)
+  numeric_cols <- sapply(data, is.numeric)
+  numeric_data <- data[, numeric_cols]
+
+  correlation_matrix <- cor(numeric_data, use = "complete.obs")
+
+  # Korelasyon matrisini ısı haritası olarak çiz
+  library(ggplot2)
+  library(reshape2)
+  melted_correlation <- melt(correlation_matrix)
+  ggplot(data = melted_correlation, aes(x = Var1, y = Var2, fill = value)) +
+    geom_tile() +
+    scale_fill_gradient2(low = "blue", high = "red", mid = "white",
+                         midpoint = 0, limit = c(-1,1), space = "Lab",
+                         name="Pearson\nCorrelation") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1,
+                                     size = 8, hjust = 1)) +
+    coord_fixed()
+}

@@ -1,0 +1,78 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Q1 İş, problem ve ihtiyaç tanımı
+
+Q.1.1 İş tanımı: CleanAir Analytics, şehirlerdeki hava kalitesini ölçerek çevresel sağlığı ve yaşam kalitesini iyileştirmeyi hedefler.Hava kalitesindeki değişiklikler hakkında halkı bilgilendirir ve sağlık uyarıları ve öneriler sunar. Hava kalitesi verilerini kullanarak şehir planlama ve politika yapımında karar vericilere destek sağlar.
+
+### Problem ve ihtiyaç
+
+Q.1.2 Problem ve ihtiyaç: CleanAir Analytics'in karşılaştığı temel problem, hava kirliliği ve hava kalitesi konularında doğru, güvenilir ve detaylı verilere erişmektir. Şehirlerdeki hava kalitesini etkileyen faktörler kompleks ve değişken olduğundan, bu verilerin toplanması, analizi ve yorumlanması büyük bir zorluk oluşturabilir.Bu problemi iyileştirmek için, şirketin doğru veri odaklı analiz servisine ihtiyacı vardır.Hava kalitesi sensörleri ve diğer veri kaynakları aracılığıyla şehirlerdeki hava kalitesini sürekli olarak izler ve verileri topla
+
+### Çözüm önerisi - Veri Seti tanımı
+
+CleanAir Analytics'in hava kalitesi analizi için kullanacağı veri seti, şehirlerdeki hava kalitesini ölçmek için kullanılan sensörlerden ve hava kirliliği izleme istasyonlarından elde edilen verileri içerecektir. Bu veri seti genellikle şu tür verileri içerebilir:PM10 ve PM2.5 partikül madde konsantrasyonları, NO2, SO2, CO gibi gazların konsantrasyonları,Meteorolojik veriler (sıcaklık, nem, rüzgar hızı ve yönü),Zaman serisi verileri.
+
+### Çözüm önerisi - Planlanan analiz (özet)
+
+Planlanan analiz, şehir içine kurulan atık imha merkezinin hava kalitesine etkisini değerlendirmek için veri odaklı bir yaklaşımı içerecektir. Veri Toplama,Veri Temizleme ve Hazırlama,Veri Analizi,,Sonuçların Raporlanması. \### Çözüm önerisi - Planlanan analiz sonuçları Zaman Serisi Analizi: Zaman içindeki hava kirliliği seviyelerinin analizi. Bu analiz, atık imha merkezinin faaliyetlerinin hava kalitesine etkilerini zaman içinde göstererek trendleri ve değişiklikleri ortaya koyabilir.Atık imha merkezinin faaliyetleri ile hava kirliliği arasındaki ilişkiyi belirlemek için yapılan istatistiksel korelasyon analizi. Bu analiz, atık imha merkezinin hava kalitesine olan etkisini daha açık bir şekilde gösterebilir.Analiz sonuçları, atık imha merkezinin faaliyetlerini iyileştirmek ve hava kalitesini korumak için alınabilecek önlemleri belirlemeye yardımcı olabilir.
+
+## Q2 - Veri İthali
+
+```{r}
+
+library("RSQLite")
+library("DBI")
+library("readr")
+library("dplyr")
+
+# Veritabanı dosyasının adı
+db_path <- "Vize_Q2_200401008_Yavuz_Kadir.sqlite"  
+# CSV dosyasının yolu
+csv_file <- "hava_kalitesi.csv"  
+# SQLite'daki tablo ismi
+table_name <- "veri_tablosu"  
+
+# CSV dosyasını SQLite veritabanına aktar
+vize200401008::import_csv_to_sqlite(db_path, csv_file, table_name)
+```
+
+## Q3 - Veri Kalite Kontrolü
+
+```{r}
+library(testthat)
+library(DBI)
+library("RSQLite")
+library("DBI")
+library("readr")
+library("dplyr")
+
+db_path <- "Vize_Q3_200401008_Yavuz_Kadir.sqlite"  
+
+csv_file <- "hava_kalitesi.csv"  
+
+table_name <- "veri_tablosu"  
+
+# CSV dosyasını SQLite veritabanına aktar
+vize200401008::import_csv_to_sqlite(db_path, csv_file, table_name)
+
+vize200401008::fetch_and_fill_na(db_path, table_name)
+
+devtools::test()
+
+```
+
+## Q4 Veri analizi
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+vize200401008::calculate_correlation_and_plot(db_path, table_name)
+
+
+```
