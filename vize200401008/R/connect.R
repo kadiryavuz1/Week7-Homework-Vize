@@ -27,5 +27,3 @@ connect_to_database <- function(db_path) {
   con <- dbConnect(SQLite(), dbname = db_path)
   return(con)
 }
-
-
